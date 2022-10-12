@@ -32,7 +32,6 @@ export function Formulario() {
         ref={inputRef}
       />
       <button disabled={!nome}>Adicionar</button>
-      {console.log(mensagemDeErro)}
       {mensagemDeErro && <p role="alert">{mensagemDeErro}</p>}
     </form>
   );
