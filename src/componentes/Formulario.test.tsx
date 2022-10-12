@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
+import { RecoilRoot } from "recoil";
 import { Formulario } from "./Formulario"
 // Jest
 // 'test' -> função fornecida pela jest que aceita 2 argumentos: Uma string dizendo o que o teste irá fazer e uma função onde fazemos a implementeção do teste
@@ -7,7 +8,11 @@ import { Formulario } from "./Formulario"
 // Garantir que o Input esteja no documento e que o botão esteja desabilitado;
 test('quando o input está vazio, novos participantes não podem ser adicionados', () => {
 
-  render(<Formulario />);
+  render(
+    <RecoilRoot>
+      <Formulario />
+    </RecoilRoot>
+  );
 
   // Econtrar input na DOM (por placeholder)
   const input = screen.getByPlaceholderText('Insira os nomes dos participantes');
@@ -23,7 +28,11 @@ test('quando o input está vazio, novos participantes não podem ser adicionados
 
 
 test('adicionar participante caso exista um nome preenchido', () => {
-  render(<Formulario />);
+  render(
+    <RecoilRoot>
+      <Formulario />
+    </RecoilRoot>
+  );
 
   // Econtrar input na DOM (por placeholder)
   const input = screen.getByPlaceholderText('Insira os nomes dos participantes');
@@ -44,5 +53,34 @@ test('adicionar participante caso exista um nome preenchido', () => {
   // garantir que o input esteja limpo e com o foco ativo
   expect(input).toHaveValue("");
   expect(input).toHaveFocus();
+});
 
+test('nomes duplicados não podem ser adicionados na lista', () => {
+  render(
+    <RecoilRoot>
+      <Formulario />
+    </RecoilRoot>
+  );
+
+  const input = screen.getByPlaceholderText('Insira os nomes dos participantes');
+  const button = screen.getByRole('button');
+
+  // inserir valor repetido no input
+  fireEvent.change(input, {
+    target: {
+      value: 'Nome do Participante'
+    }
+  });
+  fireEvent.click(button);
+
+  fireEvent.change(input, {
+    target: {
+      value: 'Nome do Participante'
+    }
+  });
+  fireEvent.click(button);
+
+  const mensagemDeErro = screen.getByRole('alert');
+
+  expect(mensagemDeErro.textContent).toBe('Nomes duplicados não são permitidos')
 })
