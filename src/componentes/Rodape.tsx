@@ -13,7 +13,7 @@ export const Rodape = () => {
 
   return (
     <footer>
-      <button disabled={participantes.length < 3} onClick={handleInciarBrincadeira}>Iniciar bruncadeira</button>
+      <button disabled={participantes.length < 3} onClick={handleInciarBrincadeira}>Iniciar brincadeira</button>
     </footer>
   );
 };
